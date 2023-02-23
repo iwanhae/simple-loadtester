@@ -2,7 +2,7 @@
 	import Box from './box.svelte';
 	import type { ResponseResult } from './types';
 
-	let targetLink = '/delay/1ms';
+	let targetLink = '/delay/0';
 	let interval = 100;
 	let deactive = true;
 	let useOpacity = true;

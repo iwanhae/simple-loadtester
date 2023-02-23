@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -37,8 +38,9 @@ func main() {
 
 	e.GET("/delay/:duration", func(c echo.Context) error {
 		duration := c.Param("duration")
-		if dur, err := time.ParseDuration(duration); err == nil {
-			time.Sleep(dur)
+
+		if ms, err := strconv.Atoi(duration); err == nil {
+			time.Sleep(time.Duration(ms) * time.Millisecond)
 		}
 		req := c.Request()
 		c.Response().Header().Add("color", *color)
