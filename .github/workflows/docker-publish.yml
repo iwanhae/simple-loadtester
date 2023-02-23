@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: "Docker: Build and Push"
 
 on:
   push:
@@ -42,7 +42,6 @@ jobs:
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
             type=semver,pattern={{version}}
-
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
@@ -51,5 +50,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=ghcr.io/iwanhae/controlplane-in-docker:buildcache
-          cache-to: type=registry,ref=ghcr.io/iwanhae/controlplane-in-docker:buildcache,mode=max
