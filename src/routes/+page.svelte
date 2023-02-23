@@ -2,9 +2,11 @@
 	import Box from './box.svelte';
 	import type { ResponseResult } from './types';
 
-	let targetLink = '/delay/1';
+	let targetLink = '/delay/1ms';
 	let interval = 100;
 	let deactive = true;
+	let useOpacity = true;
+	let useTransition = true;
 
 	let maxDur = 1.0;
 	let minDur = Number.MAX_VALUE;
@@ -22,13 +24,13 @@
 		const startedAt = new Date();
 		fetch(targetLink, { cache: 'no-store' })
 			.then((response) => {
-				if (299 < response.status) throw Error(response.statusText);
 				results[pptr] = {
 					isFailed: false,
 					startedAt: startedAt,
-					duration: new Date().valueOf() - startedAt.valueOf()
+					duration: new Date().valueOf() - startedAt.valueOf(),
+					status: response.status,
+					color: response.headers.get('color') || 'aqua'
 				};
-				results = results;
 			})
 			.catch((reason) => {
 				results[pptr] = {
@@ -79,6 +81,16 @@
 		}}>reset</button
 	>
 </div>
+<div class="group">
+	<label>
+		<input type="checkbox" bind:checked={useOpacity} />
+		visualize delay
+	</label>
+	<label>
+		<input type="checkbox" bind:checked={useTransition} />
+		use transition
+	</label>
+</div>
 
 <div class="group">
 	<p>request to: {targetLink}</p>
@@ -93,7 +105,7 @@
 
 <div class="result">
 	{#each results as result, i}
-		<Box {result} {maxDur} {minDur} selected={ptr === i} />
+		<Box {result} {maxDur} {minDur} selected={ptr === i} {useOpacity} {useTransition} />
 	{/each}
 </div>
 

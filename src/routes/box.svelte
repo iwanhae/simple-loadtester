@@ -5,40 +5,55 @@
 	export let maxDur = 0.0;
 	export let minDur = Number.MAX_VALUE;
 	export let selected = false;
+
+	export let useOpacity = false;
+	export let useTransition = false;
 </script>
 
 <div
-	class="box"
-	class:failed={result.isFailed}
-	class:normal={!result.isFailed && maxDur !== result.duration && result.duration !== undefined}
+	class="outter"
+	class:httpFailed={!result.isFailed && 299 < (result.status || 0)}
 	class:special={!result.isFailed && maxDur <= (result.duration || 0)}
-	style:opacity={maxDur > minDur
-		? 1.0 - ((result.duration || 0.0) - minDur) / (maxDur - minDur)
-		: 1.0}
-	class:selected
-/>
+>
+	<div
+		class="box"
+		class:networkFailed={result.isFailed}
+		style:opacity={useOpacity
+			? maxDur > minDur
+				? 1.0 - ((result.duration || 0.0) - minDur) / (maxDur - minDur)
+				: 1.0
+			: 1.0}
+		style:background-color={result.color || 'gray'}
+		class:selected
+		class:transition={useTransition}
+	/>
+</div>
 
 <style>
+	.outter {
+		width: 18px;
+		height: 18px;
+		border: solid white 2px;
+	}
 	.box {
-		width: 20px;
-		height: 20px;
-		margin: 1px;
-		background-color: gray;
+		width: 18px;
+		height: 18px;
+	}
+	.transition {
 		transition: ease 0.5s;
 	}
-	.failed {
-		background-color: red;
+	.networkFailed {
+		background-color: red !important;
 		opacity: 1 !important;
 	}
-	.normal {
-		background-color: aqua;
+	.httpFailed {
+		border-color: red;
 	}
 	.special {
-		background-color: blue;
-		opacity: 1 !important;
+		border-color: blue;
 	}
 	.selected {
-		background-color: black;
+		background-color: black !important;
 		transition: none;
 	}
 </style>
