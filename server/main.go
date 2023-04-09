@@ -19,13 +19,18 @@ func main() {
 		log.Println("WARN: hostname not found")
 		hostname = "UNKNOWN"
 	}
-
+	startDelay := flag.Int("start-delay", 5, "delay second")
 	rps := flag.Int("rate-limit", 0, "allowed requests per second. set zero to disable")
 	color := flag.String("color", "aqua", "this value will be added to http response headr with key of 'color'")
 	flag.Parse()
 
+	log.Println("startDelay", *startDelay)
 	log.Println("rps:", *rps)
 	log.Println("color:", *color)
+
+	log.Println("Sleep")
+	time.Sleep(time.Duration(*startDelay) * time.Second)
+	log.Println("Wake")
 
 	e := echo.New()
 
