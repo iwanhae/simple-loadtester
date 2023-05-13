@@ -15,7 +15,7 @@ RUN yarn build
 
 RUN rm -rf build/delay
 
-FROM gcr.io/distroless/static-debian11
+FROM ubuntu:22.04
 COPY --from=server /main /main
 COPY --from=web /app/build /build
 EXPOSE 8080
